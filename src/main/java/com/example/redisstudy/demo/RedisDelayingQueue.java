@@ -44,6 +44,7 @@ public class RedisDelayingQueue<T> {
     public void loop(){
         while (!Thread.interrupted()){
             //只取一条
+            //zrangeByScore  返回有序集合中指定成员的排名,有序集成员按分数值递减(从大到小)排序
             Set<String> values = jedis.zrangeByScore(queueKey,0,System.currentTimeMillis(),0,1);
             if(values.isEmpty()){
                 try{
