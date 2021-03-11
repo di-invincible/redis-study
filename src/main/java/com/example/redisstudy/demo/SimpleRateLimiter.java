@@ -22,8 +22,10 @@ public class SimpleRateLimiter {
         Pipeline pipe = jedis.pipelined();
         pipe.multi();
         pipe.zadd(key,nowTs,""+nowTs);
+        //Redis Zremrangebyscore 命令用于移除有序集中，指定分数（score）区间内的所有成员。
         pipe.zremrangeByScore(key,0,nowTs-period*1000);
         Response<Long> count = pipe.zcard(key);
+        //Redis Expire 命令用于设置 key 的过期时间，key 过期后将不再可用。单位以秒计。
         pipe.expire(key,period+1);
         pipe.exec();
         pipe.close();
@@ -34,7 +36,7 @@ public class SimpleRateLimiter {
         Jedis jedis = new Jedis();
         SimpleRateLimiter limiter = new SimpleRateLimiter(jedis);
         for (int i = 0; i < 20; i++) {
-            System.out.println(limiter.isActionAllowed("aaron","reply",60,5));
+            System.out.println(limiter.isActionAllowed("aaron","reply",20,5));
         }
     }
 }

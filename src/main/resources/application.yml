@@ -5,6 +5,6 @@ spring:
   application:
     name: redis-study
   redis:
-    host: 127.0.0.1
+    host: 192.198.1.39
     port: 6379
 
